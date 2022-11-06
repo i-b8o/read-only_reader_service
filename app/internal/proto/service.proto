@@ -1,0 +1,24 @@
+
+syntax = "proto3";
+
+option go_package = "./;pb";
+
+import "get_message.proto";
+import "create_message.proto";
+import "search_message.proto";
+import "google/protobuf/empty.proto";
+
+service RegulationGRPC {
+    rpc CreateRegulation(CreateRegulationRequestMessage) returns (CreateRegulationResponseMessage) {};
+    rpc CreateChapter(CreateChapterRequestMessage) returns (CreateChapterResponseMessage) {};
+    rpc CreateParagraphs(CreateParagraphsRequestMessage) returns (CreateParagraphsResponseMessage) {};
+    rpc FixLinks(FixLinksRequestMessage) returns (google.protobuf.Empty) {};
+    rpc GetDocumentRoot(GetDocumentRootRequestMessage) returns (GetDocumentRootResponseMessage) {};
+    rpc GetAllDocuments(google.protobuf.Empty) returns (GetAllDocumentsResponseMessage) {};
+    rpc GetFullDocument(GetFullDocumentRequestMessage) returns (GetFullDocumentResponseMessage) {};
+    rpc GetChapter(GetChapterRequestMessage) returns (GetChapterResponseMessage) {};
+    rpc Search(SearchRequestMessage) returns (SearchResponseMessage) {};
+    rpc SearchRegulations(SearchRequestMessage) returns (SearchResponseMessage) {};
+    rpc SearchChapters(SearchRequestMessage) returns (SearchResponseMessage) {};
+    rpc SearchPargaraphs(SearchRequestMessage) returns (SearchResponseMessage) {};
+}

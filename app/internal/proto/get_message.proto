@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option go_package = "./;pb";
+
+import "message_types.proto";
+
+message GetDocumentRootRequestMessage {
+    uint64 ID = 1;
+}
+
+message GetDocumentRootChapter {
+    uint64 ID   = 1;
+    string Num  = 2;
+    string Name = 3;
+}
+
+message GetDocumentRootResponseMessage {
+    string Name                                     = 1;
+    string Title                                    = 2;
+    repeated GetDocumentRootChapter Chapters = 3;
+}
+
+message GetAllDocumentsRegulation {
+    uint64 ID   = 1;
+    string Name = 2;
+}
+
+message GetAllDocumentsResponseMessage {
+    repeated GetAllDocumentsRegulation Regulations = 1;
+}
+
+message GetFullDocumentRequestMessage {
+    uint64 ID   = 1;
+}
+
+message GetFullDocumentResponseMessage {
+    string Name               = 1;
+    string Abbreviation       = 2;
+    string Title              = 3;
+    repeated Chapter Chapters = 4;
+}
+
+message GetChapterRequestMessage {
+    uint64 ID   = 1;
+}
+
+message GetChapterResponseMessage {
+    Chapter chapter = 1;
+}

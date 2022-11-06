@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "./;pb";
+
+message SearchRequestMessage {
+    string SearchQuery = 1;
+    string Limit       = 2;
+    string Offset      = 3;
+}
+
+message SearchResponseMessage {
+    string RID       = 1;
+    string RName     = 2;
+    string CID       = 3;
+    string CName     = 4;
+    string UpdatedAt = 5;
+    string PID       = 6;
+    string Text      = 7;
+    string Count     = 8;
+}

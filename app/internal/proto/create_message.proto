@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option go_package = "./;pb";
+
+import "message_types.proto";
+
+
+message CreateRegulationRequestMessage {
+    string RegulationName = 1;
+    string Abbreviation   = 2;
+    string Title          = 3;
+}
+message CreateRegulationResponseMessage {
+    uint64 ID = 1;
+}
+
+message CreateChapterRequestMessage {
+    uint64 ChapterID    = 1;
+    uint64 RegulationID = 2;
+	string ChapterName  = 3;
+	string ChapterNum   = 4;
+	uint64 OrderNum     = 5;
+}
+
+message CreateChapterResponseMessage {
+    string ID = 1;
+}
+
+
+message CreateParagraphsRequestMessage {
+    repeated Paragraph Paragraphs = 1;
+}
+
+message CreateParagraphsResponseMessage {
+    string Status = 1;
+}
+
+message FixLinksRequestMessage {
+    uint64 ID = 1;
+}
