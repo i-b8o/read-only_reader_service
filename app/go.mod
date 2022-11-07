@@ -3,7 +3,6 @@ module regulations_service
 go 1.19
 
 require (
-	github.com/golang/protobuf v1.5.2
 	github.com/i-b8o/logging v0.0.0-20221105180025-715df517e91e
 	github.com/ilyakaznacheev/cleanenv v1.4.0
 	github.com/jackc/pgconn v1.13.0
@@ -15,6 +14,7 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.1.0 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
