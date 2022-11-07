@@ -38,7 +38,7 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 	regAdapter := postgressql.NewRegulationStorage(pgClient)
 	searchAdapter := postgressql.NewSearchStorage(pgClient)
 
-	regulationGrpcService := service.NewRegulationGRPCService(regAdapter, chapterAdapter, paragraphAdapter, searchAdapter, logger)
+	regulationGrpcService := service.NewReadOnlyRegulationGRPCService(regAdapter, chapterAdapter, paragraphAdapter, searchAdapter, logger)
 
 	// read ca's cert, verify to client's certificate
 	// homeDir, err := os.UserHomeDir()
@@ -74,7 +74,7 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 
 	// grpcServer := grpc.NewServer(grpc.Creds(tlsCredentials))
 	grpcServer := grpc.NewServer()
-	pb.RegisterRegulationGRPCServer(grpcServer, regulationGrpcService)
+	pb.RegisterReadOnlyRegulationGRPCServer(grpcServer, regulationGrpcService)
 
 	return App{cfg: config, grpcServer: grpcServer}, nil
 }

@@ -28,17 +28,17 @@ type SearchStorage interface {
 	SearchChapters(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResult, error)
 	SearchPargaraphs(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResult, error)
 }
-type RegulationGRPCService struct {
+type ReadOnlyRegulationGRPCService struct {
 	regulationStorage RegulationStorage
 	chapterStorage    ChapterStorage
 	paragraphStorage  ParagraphStorage
 	searchStorage     SearchStorage
 	logging           logging.Logger
-	pb.UnimplementedRegulationGRPCServer
+	pb.UnimplementedReadOnlyRegulationGRPCServer
 }
 
-func NewRegulationGRPCService(regulationStorage RegulationStorage, chapterStorage ChapterStorage, paragraphStorage ParagraphStorage, searchStorage SearchStorage, loging logging.Logger) *RegulationGRPCService {
-	return &RegulationGRPCService{
+func NewReadOnlyRegulationGRPCService(regulationStorage RegulationStorage, chapterStorage ChapterStorage, paragraphStorage ParagraphStorage, searchStorage SearchStorage, loging logging.Logger) *ReadOnlyRegulationGRPCService {
+	return &ReadOnlyRegulationGRPCService{
 		regulationStorage: regulationStorage,
 		chapterStorage:    chapterStorage,
 		paragraphStorage:  paragraphStorage,
@@ -47,35 +47,35 @@ func NewRegulationGRPCService(regulationStorage RegulationStorage, chapterStorag
 	}
 }
 
-func (s *RegulationGRPCService) GetRegulation(ctx context.Context, req *pb.ID) (*pb.Regulation, error) {
+func (s *ReadOnlyRegulationGRPCService) GetRegulation(ctx context.Context, req *pb.ID) (*pb.Regulation, error) {
 	id := req.GetID()
 	return s.regulationStorage.Get(ctx, id)
 }
 
-func (s *RegulationGRPCService) GetChapter(ctx context.Context, req *pb.ID) (*pb.Chapter, error) {
+func (s *ReadOnlyRegulationGRPCService) GetChapter(ctx context.Context, req *pb.ID) (*pb.Chapter, error) {
 	return &pb.Chapter{}, nil
 }
 
-func (s *RegulationGRPCService) GetAllChapters(ctx context.Context, req *pb.ID) (*pb.Chapters, error) {
+func (s *ReadOnlyRegulationGRPCService) GetAllChapters(ctx context.Context, req *pb.ID) (*pb.Chapters, error) {
 	return &pb.Chapters{}, nil
 }
 
-func (s *RegulationGRPCService) GetParagraphs(ctx context.Context, req *pb.ID) (*pb.Paragraphs, error) {
+func (s *ReadOnlyRegulationGRPCService) GetParagraphs(ctx context.Context, req *pb.ID) (*pb.Paragraphs, error) {
 	return &pb.Paragraphs{}, nil
 }
 
-func (s *RegulationGRPCService) Search(ctx context.Context, req *pb.SearchRequestMessage) (*pb.SearchResponseMessage, error) {
+func (s *ReadOnlyRegulationGRPCService) Search(ctx context.Context, req *pb.SearchRequestMessage) (*pb.SearchResponseMessage, error) {
 	return &pb.SearchResponseMessage{}, nil
 }
 
-func (s *RegulationGRPCService) SearchRegulations(ctx context.Context, req *pb.SearchRequestMessage) (*pb.SearchResponseMessage, error) {
+func (s *ReadOnlyRegulationGRPCService) SearchRegulations(ctx context.Context, req *pb.SearchRequestMessage) (*pb.SearchResponseMessage, error) {
 	return &pb.SearchResponseMessage{}, nil
 }
 
-func (s *RegulationGRPCService) SearchChapters(ctx context.Context, req *pb.SearchRequestMessage) (*pb.SearchResponseMessage, error) {
+func (s *ReadOnlyRegulationGRPCService) SearchChapters(ctx context.Context, req *pb.SearchRequestMessage) (*pb.SearchResponseMessage, error) {
 	return &pb.SearchResponseMessage{}, nil
 }
 
-func (s *RegulationGRPCService) SearchPargaraphs(ctx context.Context, req *pb.SearchRequestMessage) (*pb.SearchResponseMessage, error) {
+func (s *ReadOnlyRegulationGRPCService) SearchPargaraphs(ctx context.Context, req *pb.SearchRequestMessage) (*pb.SearchResponseMessage, error) {
 	return &pb.SearchResponseMessage{}, nil
 }

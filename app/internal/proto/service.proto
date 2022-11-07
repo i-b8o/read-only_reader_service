@@ -6,7 +6,7 @@ option go_package = "./;pb";
 import "messages.proto";
 import "search_messages.proto";
 
-service RegulationGRPC {
+service ReadOnlyRegulationGRPC {
     rpc GetRegulation(ID) returns (Regulation) {};
     rpc GetChapter(ID) returns (Chapter) {};
     rpc GetAllChapters(ID) returns (Chapters) {};
