@@ -21,10 +21,6 @@ message Paragraph {
 
 
 
-message UpdateParagraphRequest {
-    uint64 ID      = 1;
-    string Content = 2;
-}
 
 message Paragraphs {
     repeated Paragraph Paragraphs = 1;
