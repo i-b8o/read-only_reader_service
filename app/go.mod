@@ -1,4 +1,4 @@
-module regulations_service
+module regulations_read_only_service
 
 go 1.19
 

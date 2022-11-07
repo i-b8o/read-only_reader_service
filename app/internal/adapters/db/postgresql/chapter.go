@@ -3,8 +3,8 @@ package postgressql
 import (
 	"context"
 
-	pb "regulations_service/internal/pb"
-	client "regulations_service/pkg/client/postgresql"
+	pb "regulations_read_only_service/internal/pb"
+	client "regulations_read_only_service/pkg/client/postgresql"
 )
 
 type chapterStorage struct {

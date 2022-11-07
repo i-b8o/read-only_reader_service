@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	"net"
-	postgressql "regulations_service/internal/adapters/db/postgresql"
-	"regulations_service/internal/config"
-	"regulations_service/internal/pb"
-	"regulations_service/internal/service"
-	"regulations_service/pkg/client/postgresql"
+	postgressql "regulations_read_only_service/internal/adapters/db/postgresql"
+	"regulations_read_only_service/internal/config"
+	"regulations_read_only_service/internal/pb"
+	"regulations_read_only_service/internal/service"
+	"regulations_read_only_service/pkg/client/postgresql"
 	"time"
 
 	"github.com/i-b8o/logging"
@@ -80,7 +80,7 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 }
 
 func (a *App) Run(ctx context.Context) error {
-	address := fmt.Sprintf("%s:%s", a.cfg.GRPC.BindIP, a.cfg.GRPC.Port)
+	address := fmt.Sprintf("%s:%s", a.cfg.GRPC.IP, a.cfg.GRPC.Port)
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		return err

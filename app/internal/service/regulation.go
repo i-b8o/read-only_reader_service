@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"regulations_service/internal/pb"
+	"regulations_read_only_service/internal/pb"
 
 	"github.com/i-b8o/logging"
 )

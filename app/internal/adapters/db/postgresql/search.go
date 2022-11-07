@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"regulations_service/internal/pb"
-	client "regulations_service/pkg/client/postgresql"
+	"regulations_read_only_service/internal/pb"
+	client "regulations_read_only_service/pkg/client/postgresql"
 )
 
 type searchStorage struct {
