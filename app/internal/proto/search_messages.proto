@@ -8,7 +8,7 @@ message SearchRequestMessage {
     string Offset      = 3;
 }
 
-message SearchResponseMessage {
+message SearchResult {
     string RID       = 1;
     string RName     = 2;
     string CID       = 3;
@@ -17,4 +17,8 @@ message SearchResponseMessage {
     string PID       = 6;
     string Text      = 7;
     string Count     = 8;
+}
+
+message SearchResponseMessage {
+    repeated SearchResult results = 1;
 }

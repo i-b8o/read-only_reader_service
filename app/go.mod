@@ -5,13 +5,10 @@ go 1.19
 require (
 	github.com/golang/protobuf v1.5.2
 	github.com/i-b8o/logging v0.0.0-20221105180025-715df517e91e
-	github.com/i-b8o/nonsense v0.0.0-20220923103144-3618623a71ba
 	github.com/ilyakaznacheev/cleanenv v1.4.0
 	github.com/jackc/pgconn v1.13.0
 	github.com/jackc/pgx/v4 v4.17.2
 	github.com/julienschmidt/httprouter v1.3.0
-	github.com/rs/cors v1.8.2
-	golang.org/x/sync v0.0.0-20190423024810-112230192c58
 	google.golang.org/grpc v1.50.1
 	google.golang.org/protobuf v1.28.1
 )

@@ -40,7 +40,7 @@ CREATE INDEX reg_ts_idx ON regulations USING GIN (ts);
 CREATE TABLE chapters (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL CHECK (name != ''),
-    order_num INT NOT NULL CHECK (order_num >= 0),
+    order_num SMALLINT NOT NULL CHECK (order_num >= 0),
     num TEXT,
     r_id integer REFERENCES regulations,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -64,19 +64,6 @@ CREATE TABLE paragraphs (
 ALTER TABLE paragraphs ADD COLUMN ts tsvector GENERATED ALWAYS AS (to_tsvector('russian', content)) STORED;
 CREATE INDEX p_ts_idx ON paragraphs USING GIN (ts);
 
-CREATE TABLE links (
-    id INT NOT NULL UNIQUE,
-    paragraph_num INT NOT NULL CHECK (paragraph_num >= 0),
-    c_id integer REFERENCES chapters,
-    r_id integer REFERENCES regulations
-);
-
-CREATE TABLE speech (
-    id SERIAL PRIMARY KEY,
-    order_num INT NOT NULL CHECK (order_num >= 0),
-    content TEXT,
-    paragraph_id INT NOT NULL CHECK (paragraph_id >= 0)
-);
 
 CREATE MATERIALIZED VIEW reg_search 
 AS SELECT 
