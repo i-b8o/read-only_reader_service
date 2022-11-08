@@ -6,10 +6,13 @@ import (
 	"net"
 	postgressql "regulations_read_only_service/internal/adapters/db/postgresql"
 	"regulations_read_only_service/internal/config"
-	"regulations_read_only_service/internal/pb"
+
+	// "regulations_read_only_service/internal/pb"
 	"regulations_read_only_service/internal/service"
 	"regulations_read_only_service/pkg/client/postgresql"
 	"time"
+
+	"github.com/i-b8o/regulations_contracts/pb"
 
 	"github.com/i-b8o/logging"
 	"google.golang.org/grpc"
@@ -74,6 +77,7 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 
 	// grpcServer := grpc.NewServer(grpc.Creds(tlsCredentials))
 	grpcServer := grpc.NewServer()
+	// pb.RegisterReadOnlyRegulationGRPCServer(grpcServer, regulationGrpcService)
 	pb.RegisterReadOnlyRegulationGRPCServer(grpcServer, regulationGrpcService)
 
 	return App{cfg: config, grpcServer: grpcServer}, nil

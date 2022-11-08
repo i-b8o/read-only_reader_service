@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"regulations_read_only_service/internal/pb"
 	client "regulations_read_only_service/pkg/client/postgresql"
+
+	"github.com/i-b8o/regulations_contracts/pb"
 )
 
 type searchStorage struct {
@@ -16,7 +17,7 @@ func NewSearchStorage(client client.PostgreSQLClient) *searchStorage {
 	return &searchStorage{client: client}
 }
 
-func (ss *searchStorage) SearchPargaraphs(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResult, error) {
+func (ss *searchStorage) SearchPargaraphs(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResponse, error) {
 	sql := `SELECT p.id, p.content, c.name, r.name, c.updated_at, count(*) OVER() AS full_count from paragraphs AS p INNER JOIN chapters as c ON c.id = p.c_id INNER JOIN regulations AS r ON c.r_id = r.id  WHERE p.ts @@ phraseto_tsquery('russian',$1)`
 	// Pagination
 	if len(params) == 3 {
@@ -26,7 +27,7 @@ func (ss *searchStorage) SearchPargaraphs(ctx context.Context, searchQuery strin
 	// else if len(params) == 1 { // First page
 	// 	sql += fmt.Sprintf(` LIMIT %s`, params[0])
 	// }
-	var searchResults []*pb.SearchResult
+	var searchResults []*pb.SearchResponse
 	rows, err := ss.client.Query(ctx, sql, searchQuery)
 	if err != nil {
 		return nil, err
@@ -35,7 +36,7 @@ func (ss *searchStorage) SearchPargaraphs(ctx context.Context, searchQuery strin
 	defer rows.Close()
 
 	for rows.Next() {
-		search := &pb.SearchResult{}
+		search := &pb.SearchResponse{}
 		if err = rows.Scan(
 			&search.PID, &search.Text, &search.CName, &search.RName, &search.UpdatedAt, &search.Count,
 		); err != nil {
@@ -48,7 +49,7 @@ func (ss *searchStorage) SearchPargaraphs(ctx context.Context, searchQuery strin
 	return searchResults, nil
 }
 
-func (ss *searchStorage) SearchChapters(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResult, error) {
+func (ss *searchStorage) SearchChapters(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResponse, error) {
 	sql := `SELECT c.id, c.name, r.name, c.updated_at, count(*) OVER() AS full_count from chapters AS c INNER JOIN regulations as r ON c.r_id = r.id WHERE c.ts @@ phraseto_tsquery('russian',$1)`
 	// Pagination
 	if len(params) == 2 {
@@ -58,7 +59,7 @@ func (ss *searchStorage) SearchChapters(ctx context.Context, searchQuery string,
 	// else if len(params) == 1 { // First page
 	// 	sql += fmt.Sprintf(` LIMIT %s`, params[0])
 	// }
-	var searchResults []*pb.SearchResult
+	var searchResults []*pb.SearchResponse
 	rows, err := ss.client.Query(ctx, sql, searchQuery)
 	if err != nil {
 		return nil, err
@@ -67,7 +68,7 @@ func (ss *searchStorage) SearchChapters(ctx context.Context, searchQuery string,
 	defer rows.Close()
 
 	for rows.Next() {
-		search := &pb.SearchResult{}
+		search := &pb.SearchResponse{}
 		if err = rows.Scan(
 			&search.CID, &search.Text, &search.RName, &search.UpdatedAt, &search.Count,
 		); err != nil {
@@ -80,7 +81,7 @@ func (ss *searchStorage) SearchChapters(ctx context.Context, searchQuery string,
 	return searchResults, nil
 }
 
-func (ss *searchStorage) SearchRegulations(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResult, error) {
+func (ss *searchStorage) SearchRegulations(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResponse, error) {
 	sql := `SELECT id, name, title, updated_at, count(*) OVER() AS full_count from regulations WHERE ts @@ phraseto_tsquery('russian',$1)`
 	// Pagination
 	if len(params) == 2 {
@@ -90,7 +91,7 @@ func (ss *searchStorage) SearchRegulations(ctx context.Context, searchQuery stri
 	//  else if len(params) == 1 { // First page
 	// 	sql += fmt.Sprintf(` LIMIT %s`, params[0])
 	// }
-	var searchResults []*pb.SearchResult
+	var searchResults []*pb.SearchResponse
 	rows, err := ss.client.Query(ctx, sql, searchQuery)
 	if err != nil {
 		return nil, err
@@ -99,7 +100,7 @@ func (ss *searchStorage) SearchRegulations(ctx context.Context, searchQuery stri
 	defer rows.Close()
 
 	for rows.Next() {
-		search := &pb.SearchResult{}
+		search := &pb.SearchResponse{}
 		if err = rows.Scan(
 			&search.RID, &search.RName, &search.Text, &search.UpdatedAt, &search.Count,
 		); err != nil {
@@ -112,10 +113,10 @@ func (ss *searchStorage) SearchRegulations(ctx context.Context, searchQuery stri
 	return searchResults, nil
 }
 
-func (ss *searchStorage) Search(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResult, error) {
+func (ss *searchStorage) Search(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResponse, error) {
 	sql := `SELECT r_id, r_name, c_id, c_name, p_id, text, count(*) OVER() AS full_count FROM reg_search WHERE ts @@ phraseto_tsquery('russian',$1) ORDER BY ts_rank(ts, phraseto_tsquery('russian',$1))`
 
-	var searchResults []*pb.SearchResult
+	var searchResults []*pb.SearchResponse
 	if len(params) == 2 {
 		sql += fmt.Sprintf(` OFFSET %s LIMIT %s`, params[0], params[1])
 	}
@@ -128,7 +129,7 @@ func (ss *searchStorage) Search(ctx context.Context, searchQuery string, params 
 	defer rows.Close()
 
 	for rows.Next() {
-		search := &pb.SearchResult{}
+		search := &pb.SearchResponse{}
 		if err = rows.Scan(
 			&search.RID, &search.RName, &search.CID, &search.CName, &search.PID, &search.Text, &search.Count,
 		); err != nil {
@@ -141,19 +142,19 @@ func (ss *searchStorage) Search(ctx context.Context, searchQuery string, params 
 	return searchResults, nil
 }
 
-func (ss *searchStorage) SearchLike(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResult, error) {
+func (ss *searchStorage) SearchLike(ctx context.Context, searchQuery string, params ...string) ([]*pb.SearchResponse, error) {
 	sql := `SELECT r_id, r_name, c_id, c_name, p_id, text, count(*) OVER() AS full_count from reg_search where text like '%` + searchQuery + `%'`
 	if len(params) == 2 {
 		sql += fmt.Sprintf(` OFFSET %s LIMIT %s`, params[0], params[1])
 	}
-	var searchResults []*pb.SearchResult
+	var searchResults []*pb.SearchResponse
 	rows, err := ss.client.Query(ctx, sql)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	for rows.Next() {
-		search := &pb.SearchResult{}
+		search := &pb.SearchResponse{}
 		if err = rows.Scan(
 			&search.RID, &search.RName, &search.CID, &search.CName, &search.PID, &search.Text, &search.Count,
 		); err != nil {

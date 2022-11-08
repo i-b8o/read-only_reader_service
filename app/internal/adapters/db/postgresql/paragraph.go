@@ -3,8 +3,9 @@ package postgressql
 import (
 	"context"
 
-	"regulations_read_only_service/internal/pb"
 	client "regulations_read_only_service/pkg/client/postgresql"
+
+	"github.com/i-b8o/regulations_contracts/pb"
 )
 
 type paragraphStorage struct {
@@ -16,10 +17,10 @@ func NewParagraphStorage(client client.PostgreSQLClient) *paragraphStorage {
 }
 
 // GetAllById returns all paragraphs associated with the given chapter ID
-func (ps *paragraphStorage) GetAll(ctx context.Context, chapterID uint64) ([]*pb.Paragraph, error) {
+func (ps *paragraphStorage) GetAll(ctx context.Context, chapterID uint64) ([]*pb.ReadOnlyParagraph, error) {
 	const sql = `SELECT paragraph_id, order_num, is_nft, is_table, has_links, class, content, c_id FROM "paragraphs" WHERE c_id = $1 AND content!='-' ORDER BY order_num`
 
-	var paragraphs []*pb.Paragraph
+	var paragraphs []*pb.ReadOnlyParagraph
 
 	rows, err := ps.client.Query(ctx, sql, chapterID)
 	if err != nil {
@@ -29,7 +30,7 @@ func (ps *paragraphStorage) GetAll(ctx context.Context, chapterID uint64) ([]*pb
 	defer rows.Close()
 
 	for rows.Next() {
-		paragraph := &pb.Paragraph{}
+		paragraph := &pb.ReadOnlyParagraph{}
 		if err = rows.Scan(
 			&paragraph.ID, &paragraph.Num, &paragraph.IsNFT, &paragraph.IsTable, &paragraph.HasLinks, &paragraph.Class, &paragraph.Content, &paragraph.ChapterID,
 		); err != nil {
