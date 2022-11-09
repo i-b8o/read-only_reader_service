@@ -2,10 +2,13 @@ package postgressql
 
 import (
 	"context"
+	"errors"
+	"fmt"
 
 	client "regulations_read_only_service/pkg/client/postgresql"
 
 	"github.com/i-b8o/regulations_contracts/pb"
+	"github.com/jackc/pgconn"
 )
 
 type paragraphStorage struct {
@@ -24,6 +27,10 @@ func (ps *paragraphStorage) GetAll(ctx context.Context, chapterID uint64) ([]*pb
 
 	rows, err := ps.client.Query(ctx, sql, chapterID)
 	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+		}
 		return nil, err
 	}
 
@@ -34,6 +41,10 @@ func (ps *paragraphStorage) GetAll(ctx context.Context, chapterID uint64) ([]*pb
 		if err = rows.Scan(
 			&paragraph.ID, &paragraph.Num, &paragraph.IsNFT, &paragraph.IsTable, &paragraph.HasLinks, &paragraph.Class, &paragraph.Content, &paragraph.ChapterID,
 		); err != nil {
+			var pgErr *pgconn.PgError
+			if errors.As(err, &pgErr) {
+				return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+			}
 			return nil, err
 		}
 

@@ -2,11 +2,13 @@ package postgressql
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	client "regulations_read_only_service/pkg/client/postgresql"
 
 	"github.com/i-b8o/regulations_contracts/pb"
+	"github.com/jackc/pgconn"
 )
 
 type searchStorage struct {
@@ -30,6 +32,10 @@ func (ss *searchStorage) SearchPargaraphs(ctx context.Context, searchQuery strin
 	var searchResults []*pb.SearchResponse
 	rows, err := ss.client.Query(ctx, sql, searchQuery)
 	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+		}
 		return nil, err
 	}
 
@@ -40,6 +46,10 @@ func (ss *searchStorage) SearchPargaraphs(ctx context.Context, searchQuery strin
 		if err = rows.Scan(
 			&search.PID, &search.Text, &search.CName, &search.RName, &search.UpdatedAt, &search.Count,
 		); err != nil {
+			var pgErr *pgconn.PgError
+			if errors.As(err, &pgErr) {
+				return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+			}
 			return nil, err
 		}
 
@@ -62,6 +72,10 @@ func (ss *searchStorage) SearchChapters(ctx context.Context, searchQuery string,
 	var searchResults []*pb.SearchResponse
 	rows, err := ss.client.Query(ctx, sql, searchQuery)
 	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+		}
 		return nil, err
 	}
 
@@ -72,6 +86,10 @@ func (ss *searchStorage) SearchChapters(ctx context.Context, searchQuery string,
 		if err = rows.Scan(
 			&search.CID, &search.Text, &search.RName, &search.UpdatedAt, &search.Count,
 		); err != nil {
+			var pgErr *pgconn.PgError
+			if errors.As(err, &pgErr) {
+				return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+			}
 			return nil, err
 		}
 
@@ -94,6 +112,10 @@ func (ss *searchStorage) SearchRegulations(ctx context.Context, searchQuery stri
 	var searchResults []*pb.SearchResponse
 	rows, err := ss.client.Query(ctx, sql, searchQuery)
 	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+		}
 		return nil, err
 	}
 
@@ -104,6 +126,10 @@ func (ss *searchStorage) SearchRegulations(ctx context.Context, searchQuery stri
 		if err = rows.Scan(
 			&search.RID, &search.RName, &search.Text, &search.UpdatedAt, &search.Count,
 		); err != nil {
+			var pgErr *pgconn.PgError
+			if errors.As(err, &pgErr) {
+				return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+			}
 			return nil, err
 		}
 
@@ -123,6 +149,10 @@ func (ss *searchStorage) Search(ctx context.Context, searchQuery string, params 
 
 	rows, err := ss.client.Query(ctx, sql, searchQuery)
 	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+		}
 		return nil, err
 	}
 
@@ -133,6 +163,10 @@ func (ss *searchStorage) Search(ctx context.Context, searchQuery string, params 
 		if err = rows.Scan(
 			&search.RID, &search.RName, &search.CID, &search.CName, &search.PID, &search.Text, &search.Count,
 		); err != nil {
+			var pgErr *pgconn.PgError
+			if errors.As(err, &pgErr) {
+				return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+			}
 			return nil, err
 		}
 
@@ -150,6 +184,10 @@ func (ss *searchStorage) SearchLike(ctx context.Context, searchQuery string, par
 	var searchResults []*pb.SearchResponse
 	rows, err := ss.client.Query(ctx, sql)
 	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+		}
 		return nil, err
 	}
 	defer rows.Close()
@@ -158,6 +196,10 @@ func (ss *searchStorage) SearchLike(ctx context.Context, searchQuery string, par
 		if err = rows.Scan(
 			&search.RID, &search.RName, &search.CID, &search.CName, &search.PID, &search.Text, &search.Count,
 		); err != nil {
+			var pgErr *pgconn.PgError
+			if errors.As(err, &pgErr) {
+				return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+			}
 			return nil, err
 		}
 

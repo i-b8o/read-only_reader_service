@@ -2,10 +2,13 @@ package postgressql
 
 import (
 	"context"
+	"errors"
+	"fmt"
 
 	client "regulations_read_only_service/pkg/client/postgresql"
 
 	"github.com/i-b8o/regulations_contracts/pb"
+	"github.com/jackc/pgconn"
 )
 
 type chapterStorage struct {
@@ -23,6 +26,10 @@ func (cs *chapterStorage) Get(ctx context.Context, chapterID uint64) (*pb.GetCha
 	chapter := &pb.GetChapterResponse{}
 	err := row.Scan(&chapter.ID, &chapter.Name, &chapter.Num, &chapter.OrderNum, &chapter.RegulationID, &chapter.UpdatedAt)
 	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			return chapter, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+		}
 		return chapter, err
 	}
 
@@ -46,6 +53,10 @@ func (cs *chapterStorage) GetAll(ctx context.Context, regulationID uint64) ([]*p
 		if err = rows.Scan(
 			&chapter.ID, &chapter.Name, &chapter.Num, &chapter.OrderNum,
 		); err != nil {
+			var pgErr *pgconn.PgError
+			if errors.As(err, &pgErr) {
+				return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+			}
 			return nil, err
 		}
 

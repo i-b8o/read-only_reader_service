@@ -2,10 +2,13 @@ package postgressql
 
 import (
 	"context"
+	"errors"
+	"fmt"
 
 	client "regulations_read_only_service/pkg/client/postgresql"
 
 	"github.com/i-b8o/regulations_contracts/pb"
+	"github.com/jackc/pgconn"
 )
 
 type regulationStorage struct {
@@ -23,6 +26,10 @@ func (rs *regulationStorage) Get(ctx context.Context, regulationID uint64) (*pb.
 	regulation := &pb.GetRegulationResponse{}
 	err := row.Scan(&regulation.Name, &regulation.Abbreviation, &regulation.Title)
 	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			return regulation, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+		}
 		return regulation, err
 	}
 
