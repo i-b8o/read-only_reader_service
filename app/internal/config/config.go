@@ -22,11 +22,12 @@ type Config struct {
 	}
 	// TODO upgrade env variables for the user with only select permission
 	PostgreSQL struct {
-		PostgreUsername string `env:"PSQL_USERNAME_REG" env-required:"true"`
-		Password        string `env:"PSQL_PASSWORD_REG" env-required:"true"`
-		Host            string `env:"PSQL_HOST_REG" env-required:"true"`
-		Port            string `env:"PSQL_PORT_REG" env-required:"true"`
-		Database        string `env:"PSQL_DATABASE_REG" env-required:"true"`
+		PostgreUsername string `env:"PSQL_USERNAME_REG_READ_ONLY" env-required:"true"`
+		Password        string `env:"PSQL_PASSWORD_REG_READ_ONLY" env-required:"true"`
+		Host            string `env:"PSQL_HOST_REG_READ_ONLY" env-required:"true"`
+		Port            string `env:"PSQL_PORT_REG_READ_ONLY" env-required:"true"`
+		Database        string `env:"PSQL_DATABASE_REG_READ_ONLY" env-required:"true"`
+		SSLMode         string `env:"PSQL_DATABASE_REG_READ_ONLY" env-default:"disable"`
 	}
 }
 

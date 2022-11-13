@@ -19,3 +19,9 @@ git:
 
 mod:
 	cd app;go mod tidy
+
+migrate-up:
+	migrate -path ./migrations -database 'postgres://postgres:$p@0.0.0.0:5436/postgres?sslmode=disable' up
+
+migrate-down:
+	migrate -path ./migrations -database 'postgres://postgres:$p@0.0.0.0:5436/postgres?sslmode=disable' down
