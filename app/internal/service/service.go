@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/i-b8o/logging"
-	"github.com/i-b8o/regulations_contracts/pb"
+	pb "github.com/i-b8o/regulations_contracts/pb/read_only/v1"
 )
 
 type RegulationStorage interface {

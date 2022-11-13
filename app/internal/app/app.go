@@ -12,7 +12,7 @@ import (
 	"regulations_read_only_service/pkg/client/postgresql"
 	"time"
 
-	"github.com/i-b8o/regulations_contracts/pb"
+	pb "github.com/i-b8o/regulations_contracts/pb/read_only/v1"
 
 	"github.com/i-b8o/logging"
 	"google.golang.org/grpc"
