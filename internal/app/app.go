@@ -24,11 +24,11 @@ type App struct {
 }
 
 func NewApp(ctx context.Context, config *config.Config) (App, error) {
-	logger := logging.GetLogger(config.Logger.LogLevel)
+	logger := logging.GetLogger(config.AppConfig.LogLevel)
 
 	logger.Print("Postgres initializing")
 	pgConfig := postgresql.NewPgConfig(
-		config.PostgreSQL.PostgreUsername, config.PostgreSQL.Password,
+		config.PostgreSQL.Username, config.PostgreSQL.Password,
 		config.PostgreSQL.Host, config.PostgreSQL.Port, config.PostgreSQL.Database,
 	)
 
