@@ -49,7 +49,7 @@ func NewClient(ctx context.Context, maxAttempts int, maxDelay time.Duration, cfg
 
 		pool, err = pgxpool.ConnectConfig(ctx, pgxCfg)
 		if err != nil {
-			log.Println("Failed to connect to postgres... Going to do the next attempt")
+			log.Printf("Failed to connect to postgres %s Going to do the next attempt: %s\n", dsn, err)
 			return err
 		}
 

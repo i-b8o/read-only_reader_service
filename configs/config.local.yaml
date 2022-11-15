@@ -9,8 +9,7 @@ grpc:
   port: 30000
 
 postgresql:
-  host: 0.0.0.0
+  host: reader_db
   port: "5432"
   username: postgres
-  password: postgres
-  database: prodservice
+  database: postgres

@@ -19,7 +19,7 @@ type Config struct {
 	} `yaml:"app"`
 	PostgreSQL struct {
 		Username string `yaml:"username" env:"PSQL_USERNAME" env-required:"true"`
-		Password string `yaml:"password" env:"PSQL_PASSWORD" env-required:"true"`
+		Password string `env:"POSTGRES_PASSWORD" env-required:"true"`
 		Host     string `yaml:"host" env:"PSQL_HOST" env-required:"true"`
 		Port     string `yaml:"port" env:"PSQL_PORT" env-required:"true"`
 		Database string `yaml:"database" env:"PSQL_DATABASE" env-required:"true"`
@@ -51,6 +51,8 @@ func GetConfig() *Config {
 		}
 
 		instance = &Config{}
+
+		instance.PostgreSQL.Password = os.Getenv("DB_PASSWORD")
 
 		if err := cleanenv.ReadConfig(configPath, instance); err != nil {
 			helpText := "Read Only"
