@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"net"
-	postgressql "regulations_read_only_service/internal/adapters/db/postgresql"
-	"regulations_read_only_service/internal/config"
+	postgressql "read-only_reader_service/internal/adapters/db/postgresql"
+	"read-only_reader_service/internal/config"
 
-	// "regulations_read_only_service/internal/pb"
-	"regulations_read_only_service/internal/service"
-	"regulations_read_only_service/pkg/client/postgresql"
+	// "read-only_reader_service/internal/pb"
+	"read-only_reader_service/internal/service"
+	"read-only_reader_service/pkg/client/postgresql"
 	"time"
 
 	pb "github.com/i-b8o/regulations_contracts/pb/read_only/v1"

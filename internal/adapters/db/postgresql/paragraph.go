@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	client "regulations_read_only_service/pkg/client/postgresql"
+	client "read-only_reader_service/pkg/client/postgresql"
 
 	pb "github.com/i-b8o/regulations_contracts/pb/read_only/v1"
 	"github.com/jackc/pgconn"

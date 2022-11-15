@@ -1,10 +1,10 @@
-module regulations_read_only_service
+module read-only_reader_service
 
 go 1.19
 
 require (
 	github.com/i-b8o/logging v0.0.0-20221105180025-715df517e91e
-	github.com/i-b8o/regulations_contracts v0.0.0-20221113174409-0958827d2de4
+	github.com/i-b8o/regulations_contracts v0.0.0-20221114130843-1e4910d176f8
 	github.com/ilyakaznacheev/cleanenv v1.4.0
 	github.com/jackc/pgconn v1.13.0
 	github.com/jackc/pgx/v4 v4.17.2
