@@ -26,5 +26,5 @@ migrate-up:
 migrate-down:
 	migrate -path ./migrations -database 'postgres://reader:$p@0.0.0.0:5436/reader?sslmode=disable' down
 
-test:
-	go test ./...
+# test:
+# 	go test ./...
