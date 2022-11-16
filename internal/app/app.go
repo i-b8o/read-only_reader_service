@@ -12,7 +12,7 @@ import (
 	"read-only_reader_service/pkg/client/postgresql"
 	"time"
 
-	pb "github.com/i-b8o/regulations_contracts/pb/read_only/v1"
+	pb "github.com/i-b8o/read-only_contracts/pb/reader/v1"
 
 	"github.com/i-b8o/logging"
 	"google.golang.org/grpc"
@@ -39,9 +39,7 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 	chapterAdapter := postgressql.NewChapterStorage(pgClient)
 	paragraphAdapter := postgressql.NewParagraphStorage(pgClient)
 	regAdapter := postgressql.NewRegulationStorage(pgClient)
-	searchAdapter := postgressql.NewSearchStorage(pgClient)
-
-	regulationGrpcService := service.NewReadOnlyRegulationGRPCService(regAdapter, chapterAdapter, paragraphAdapter, searchAdapter, logger)
+	regulationGrpcService := service.NewReaderGRPCService(regAdapter, chapterAdapter, paragraphAdapter, logger)
 
 	// read ca's cert, verify to client's certificate
 	// homeDir, err := os.UserHomeDir()
@@ -76,15 +74,15 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 	// tlsCredentials := credentials.NewTLS(conf)
 
 	// grpcServer := grpc.NewServer(grpc.Creds(tlsCredentials))
-	grpcServer := grpc.NewServer()
 	// pb.RegisterReadOnlyRegulationGRPCServer(grpcServer, regulationGrpcService)
-	pb.RegisterReadOnlyRegulationGRPCServer(grpcServer, regulationGrpcService)
+	grpcServer := grpc.NewServer()
+	pb.RegisterReaderGRPCServer(grpcServer, regulationGrpcService)
 
 	return App{cfg: config, grpcServer: grpcServer}, nil
 }
 
 func (a *App) Run(ctx context.Context) error {
-	address := fmt.Sprintf("%s:%s", a.cfg.GRPC.IP, a.cfg.GRPC.Port)
+	address := fmt.Sprintf("%s:%d", a.cfg.GRPC.IP, a.cfg.GRPC.Port)
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		return err

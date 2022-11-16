@@ -7,7 +7,7 @@ import (
 
 	client "read-only_reader_service/pkg/client/postgresql"
 
-	pb "github.com/i-b8o/regulations_contracts/pb/read_only/v1"
+	pb "github.com/i-b8o/read-only_contracts/pb/reader/v1"
 	"github.com/jackc/pgconn"
 )
 
@@ -37,10 +37,10 @@ func (cs *chapterStorage) Get(ctx context.Context, chapterID uint64) (*pb.GetCha
 }
 
 // GetAll returns all chapters associated with the given ID
-func (cs *chapterStorage) GetAll(ctx context.Context, regulationID uint64) ([]*pb.ReadOnlyChapter, error) {
+func (cs *chapterStorage) GetAll(ctx context.Context, regulationID uint64) ([]*pb.ReaderChapter, error) {
 	const sql = `SELECT id,name,num,order_num FROM "chapters" WHERE r_id = $1 ORDER BY order_num`
 
-	var chapters []*pb.ReadOnlyChapter
+	var chapters []*pb.ReaderChapter
 
 	rows, err := cs.client.Query(ctx, sql, regulationID)
 	if err != nil {
@@ -49,7 +49,7 @@ func (cs *chapterStorage) GetAll(ctx context.Context, regulationID uint64) ([]*p
 	defer rows.Close()
 
 	for rows.Next() {
-		chapter := &pb.ReadOnlyChapter{}
+		chapter := &pb.ReaderChapter{}
 		if err = rows.Scan(
 			&chapter.ID, &chapter.Name, &chapter.Num, &chapter.OrderNum,
 		); err != nil {

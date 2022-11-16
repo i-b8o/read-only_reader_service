@@ -18,11 +18,11 @@ type Config struct {
 		LogLevel string `yaml:"log-level" env:"LOG_LEVEL" env-default:"trace"`
 	} `yaml:"app"`
 	PostgreSQL struct {
-		Username string `yaml:"username" env:"PSQL_USERNAME" env-required:"true"`
-		Password string `env:"POSTGRES_PASSWORD" env-required:"true"`
-		Host     string `yaml:"host" env:"PSQL_HOST" env-required:"true"`
-		Port     string `yaml:"port" env:"PSQL_PORT" env-required:"true"`
-		Database string `yaml:"database" env:"PSQL_DATABASE" env-required:"true"`
+		Username string `yaml:"username" env:"POSTGRES_USER" env-required:"true"`
+		Password string `yaml:"password" env:"POSTGRES_PASSWORD" env-required:"true"`
+		Host     string `yaml:"host" env:"POSTGRES_HOST" env-required:"true"`
+		Port     string `yaml:"port" env:"POSTGRES_PORT" env-required:"true"`
+		Database string `yaml:"database" env:"POSTGRES_DB" env-required:"true"`
 	} `yaml:"postgresql"`
 }
 

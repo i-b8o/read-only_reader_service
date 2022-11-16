@@ -7,7 +7,7 @@ import (
 
 	client "read-only_reader_service/pkg/client/postgresql"
 
-	pb "github.com/i-b8o/regulations_contracts/pb/read_only/v1"
+	pb "github.com/i-b8o/read-only_contracts/pb/reader/v1"
 	"github.com/jackc/pgconn"
 )
 

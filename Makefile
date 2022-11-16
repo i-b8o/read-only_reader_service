@@ -21,7 +21,10 @@ mod:
 	cd app;go mod tidy
 
 migrate-up:
-	migrate -path ./migrations -database 'postgres://postgres:$p@0.0.0.0:5436/postgres?sslmode=disable' up
+	migrate -path ./migrations -database 'postgres://reader:$p@0.0.0.0:5436/reader?sslmode=disable' up
 
 migrate-down:
-	migrate -path ./migrations -database 'postgres://postgres:$p@0.0.0.0:5436/postgres?sslmode=disable' down
+	migrate -path ./migrations -database 'postgres://reader:$p@0.0.0.0:5436/reader?sslmode=disable' down
+
+test:
+	go test ./...
