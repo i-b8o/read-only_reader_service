@@ -54,6 +54,8 @@ github.com/i-b8o/read-only_contracts v0.0.0-20221117104911-10673a97b1a2 h1:EFEk1
 github.com/i-b8o/read-only_contracts v0.0.0-20221117104911-10673a97b1a2/go.mod h1:+xArhQldMdQb+B4l1IFwRUmJNoTT1zJ4cx9vI765Qcc=
 github.com/i-b8o/read-only_contracts v0.0.0-20221117105948-53f8c0b6afb3 h1:DA19ss0+T50Unh6XhSrQTutLmXL4w293GHiJGC5i03c=
 github.com/i-b8o/read-only_contracts v0.0.0-20221117105948-53f8c0b6afb3/go.mod h1:+xArhQldMdQb+B4l1IFwRUmJNoTT1zJ4cx9vI765Qcc=
+github.com/i-b8o/read-only_contracts v0.0.0-20221117172120-bc85e9ccd52d h1:stCwypeogl+qaVqZSlWZG4Vof/WRfg2LiplOSfDNB48=
+github.com/i-b8o/read-only_contracts v0.0.0-20221117172120-bc85e9ccd52d/go.mod h1:+xArhQldMdQb+B4l1IFwRUmJNoTT1zJ4cx9vI765Qcc=
 github.com/i-b8o/regulations_contracts v0.0.0-20221114130843-1e4910d176f8 h1:F9YCwrz+e20uMj9Y4sB4JBL9u11HplXkBre6yenJ4CM=
 github.com/i-b8o/regulations_contracts v0.0.0-20221114130843-1e4910d176f8/go.mod h1:BJfjDZHBG93j5H2JEnV2qUYJhUQT41kBKGNICqQcT/4=
 github.com/ilyakaznacheev/cleanenv v1.4.0 h1:Gvwxt6wAPUo9OOxyp5Xz9eqhLsAey4AtbCF5zevDnvs=

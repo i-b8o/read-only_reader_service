@@ -36,9 +36,10 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 	if err != nil {
 		logger.Fatal(err)
 	}
-	chapterAdapter := postgressql.NewChapterStorage(pgClient)
 	regAdapter := postgressql.NewRegulationStorage(pgClient)
-	regulationGrpcService := service.NewReaderGRPCService(regAdapter, chapterAdapter, logger)
+	chapterAdapter := postgressql.NewChapterStorage(pgClient)
+	paragraphAdapter := postgressql.NewParagraphStorage(pgClient)
+	regulationGrpcService := service.NewReaderGRPCService(regAdapter, chapterAdapter, paragraphAdapter, logger)
 
 	// read ca's cert, verify to client's certificate
 	// homeDir, err := os.UserHomeDir()
@@ -78,7 +79,7 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 	grpcServer := grpc.NewServer()
 	pb.RegisterReaderGRPCServer(grpcServer, regulationGrpcService)
 
-	return App{cfg: config, grpcServer: grpcServer}, nil
+	return App{cfg: config, grpcServer: grpcServer, logger: logger}, nil
 }
 
 func (a *App) Run(ctx context.Context) error {

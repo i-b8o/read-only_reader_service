@@ -19,17 +19,23 @@ type ChapterStorage interface {
 	GetAll(ctx context.Context, regulationID uint64) ([]*pb.ReaderChapter, error)
 }
 
+type ParagraphStorage interface {
+	GetAll(ctx context.Context, chapterID uint64) ([]*pb.ReaderParagraph, error)
+}
+
 type ReadOnlyRegulationGRPCService struct {
 	regulationStorage RegulationStorage
 	chapterStorage    ChapterStorage
 	logging           logging.Logger
+	paragraphStorage  ParagraphStorage
 	pb.UnimplementedReaderGRPCServer
 }
 
-func NewReaderGRPCService(regulationStorage RegulationStorage, chapterStorage ChapterStorage, loging logging.Logger) *ReadOnlyRegulationGRPCService {
+func NewReaderGRPCService(regulationStorage RegulationStorage, chapterStorage ChapterStorage, paragraphStorage ParagraphStorage, loging logging.Logger) *ReadOnlyRegulationGRPCService {
 	return &ReadOnlyRegulationGRPCService{
 		regulationStorage: regulationStorage,
 		chapterStorage:    chapterStorage,
+		paragraphStorage:  paragraphStorage,
 		logging:           loging,
 	}
 }
