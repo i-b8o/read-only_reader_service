@@ -20,12 +20,13 @@ func TestGetRegulation(t *testing.T) {
 		log.Fatal(err)
 	}
 	client := pb.NewReaderGRPCClient(conn)
+	defer conn.Close()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	tests := []struct {
 		id   uint64
-		resp *pb.GetRegulationResponse
+		resp *pb.GetOneRegulationResponse
 	}{
 		{
 			id:   1,
@@ -33,7 +34,7 @@ func TestGetRegulation(t *testing.T) {
 		},
 		{
 			id:   2,
-			resp: &pb.GetRegulationResponse{Name: "Имя", Abbreviation: "Аббревиатура", Title: "Заголовок"},
+			resp: &pb.GetOneRegulationResponse{Name: "Имя", Abbreviation: "Аббревиатура", Title: "Заголовок"},
 		},
 		{
 			id:   3,
@@ -42,8 +43,8 @@ func TestGetRegulation(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		getRegulationRequest := &pb.GetRegulationRequest{ID: tt.id}
-		resp, err := client.GetRegulation(ctx, getRegulationRequest)
+		getRegulationRequest := &pb.GetOneRegulationRequest{ID: tt.id}
+		resp, err := client.GetOneRegulation(ctx, getRegulationRequest)
 		if err != nil {
 			t.Errorf("TestGetRegulation(%v) got unexpected error", err)
 		}

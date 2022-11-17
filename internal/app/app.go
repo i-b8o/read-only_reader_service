@@ -7,7 +7,6 @@ import (
 	postgressql "read-only_reader_service/internal/adapters/db/postgresql"
 	"read-only_reader_service/internal/config"
 
-	// "read-only_reader_service/internal/pb"
 	"read-only_reader_service/internal/service"
 	"read-only_reader_service/pkg/client/postgresql"
 	"time"
@@ -21,6 +20,7 @@ import (
 type App struct {
 	cfg        *config.Config
 	grpcServer *grpc.Server
+	logger     logging.Logger
 }
 
 func NewApp(ctx context.Context, config *config.Config) (App, error) {
@@ -37,9 +37,8 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 		logger.Fatal(err)
 	}
 	chapterAdapter := postgressql.NewChapterStorage(pgClient)
-	paragraphAdapter := postgressql.NewParagraphStorage(pgClient)
 	regAdapter := postgressql.NewRegulationStorage(pgClient)
-	regulationGrpcService := service.NewReaderGRPCService(regAdapter, chapterAdapter, paragraphAdapter, logger)
+	regulationGrpcService := service.NewReaderGRPCService(regAdapter, chapterAdapter, logger)
 
 	// read ca's cert, verify to client's certificate
 	// homeDir, err := os.UserHomeDir()
@@ -75,6 +74,7 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 
 	// grpcServer := grpc.NewServer(grpc.Creds(tlsCredentials))
 	// pb.RegisterReadOnlyRegulationGRPCServer(grpcServer, regulationGrpcService)
+	logger.Print("grpc server initializing")
 	grpcServer := grpc.NewServer()
 	pb.RegisterReaderGRPCServer(grpcServer, regulationGrpcService)
 
@@ -87,6 +87,6 @@ func (a *App) Run(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	a.logger.Printf("started server on %s", address)
 	return a.grpcServer.Serve(listener)
-
 }

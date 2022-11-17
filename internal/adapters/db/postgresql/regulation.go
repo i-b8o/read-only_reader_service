@@ -19,11 +19,11 @@ func NewRegulationStorage(client client.PostgreSQLClient) *regulationStorage {
 	return &regulationStorage{client: client}
 }
 
-func (rs *regulationStorage) Get(ctx context.Context, regulationID uint64) (*pb.GetRegulationResponse, error) {
-	const sql = `SELECT name,abbreviation,title FROM "regulations" WHERE id = $1 LIMIT 1`
+func (rs *regulationStorage) Get(ctx context.Context, regulationID uint64) (*pb.GetOneRegulationResponse, error) {
+	const sql = `SELECT name,abbreviation,title FROM "regulation" WHERE id = $1 LIMIT 1`
 	row := rs.client.QueryRow(ctx, sql, regulationID)
 
-	regulation := &pb.GetRegulationResponse{}
+	regulation := &pb.GetOneRegulationResponse{}
 	err := row.Scan(&regulation.Name, &regulation.Abbreviation, &regulation.Title)
 	if err != nil {
 		var pgErr *pgconn.PgError
