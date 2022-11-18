@@ -21,7 +21,7 @@ func NewParagraphStorage(client client.PostgreSQLClient) *paragraphStorage {
 
 // GetAllById returns all paragraphs associated with the given chapter ID
 func (ps *paragraphStorage) GetAll(ctx context.Context, chapterID uint64) ([]*pb.ReaderParagraph, error) {
-	const sql = `SELECT paragraph_id, order_num, is_nft, is_table, has_links, class, content, c_id FROM "paragraphs" WHERE c_id = $1 AND content!='-' ORDER BY order_num`
+	const sql = `SELECT paragraph_id, order_num, is_nft, is_table, has_links, class, content, c_id FROM "paragraph" WHERE c_id = $1 AND content!='-' ORDER BY order_num`
 
 	var paragraphs []*pb.ReaderParagraph
 

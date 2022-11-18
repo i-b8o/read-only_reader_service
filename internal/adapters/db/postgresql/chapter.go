@@ -2,14 +2,13 @@ package postgressql
 
 import (
 	"context"
-	"errors"
-	"fmt"
 
 	"read-only_reader_service/internal/domain/entity"
 	client "read-only_reader_service/pkg/client/postgresql"
 
 	pb "github.com/i-b8o/read-only_contracts/pb/reader/v1"
-	"github.com/jackc/pgconn"
+
+	"github.com/jackc/pgx/v4"
 )
 
 type chapterStorage struct {
@@ -27,9 +26,8 @@ func (cs *chapterStorage) Get(ctx context.Context, chapterID uint64) (*entity.Ch
 	chapter := &entity.Chapter{}
 	err := row.Scan(&chapter.ID, &chapter.Name, &chapter.Num, &chapter.OrderNum, &chapter.RegulationID, &chapter.UpdatedAt)
 	if err != nil {
-		var pgErr *pgconn.PgError
-		if errors.As(err, &pgErr) {
-			return chapter, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
+		if err == pgx.ErrNoRows {
+			return &entity.Chapter{ID: 0}, nil
 		}
 		return chapter, err
 	}
@@ -53,15 +51,10 @@ func (cs *chapterStorage) GetAll(ctx context.Context, regulationID uint64) ([]*p
 		if err = rows.Scan(
 			&chapter.ID, &chapter.Name, &chapter.Num, &chapter.OrderNum,
 		); err != nil {
-			var pgErr *pgconn.PgError
-			if errors.As(err, &pgErr) {
-				return nil, fmt.Errorf("message: %s, code: %s", pgErr.Message, pgErr.Code)
-			}
 			return nil, err
 		}
 
 		chapters = append(chapters, chapter)
 	}
-
 	return chapters, nil
 }
