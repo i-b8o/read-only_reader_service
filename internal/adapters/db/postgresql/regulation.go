@@ -6,7 +6,6 @@ import (
 	client "read-only_reader_service/pkg/client/postgresql"
 
 	pb "github.com/i-b8o/read-only_contracts/pb/reader/v1"
-	"github.com/jackc/pgx/v4"
 )
 
 type regulationStorage struct {
@@ -24,10 +23,7 @@ func (rs *regulationStorage) Get(ctx context.Context, regulationID uint64) (*pb.
 	regulation := &pb.GetOneRegulationResponse{}
 	err := row.Scan(&regulation.Name, &regulation.Abbreviation, &regulation.Title)
 	if err != nil {
-		if err == pgx.ErrNoRows {
-			return &pb.GetOneRegulationResponse{Name: ""}, nil
-		}
-		return regulation, err
+		return nil, err
 	}
 
 	return regulation, nil

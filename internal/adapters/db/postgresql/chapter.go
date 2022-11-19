@@ -3,12 +3,11 @@ package postgressql
 import (
 	"context"
 
-	"read-only_reader_service/internal/domain/entity"
 	client "read-only_reader_service/pkg/client/postgresql"
 
-	pb "github.com/i-b8o/read-only_contracts/pb/reader/v1"
+	"read-only_reader_service/internal/domain/entity"
 
-	"github.com/jackc/pgx/v4"
+	pb "github.com/i-b8o/read-only_contracts/pb/reader/v1"
 )
 
 type chapterStorage struct {
@@ -21,14 +20,11 @@ func NewChapterStorage(client client.PostgreSQLClient) *chapterStorage {
 
 // Get returns an chapter associated with the given ID
 func (cs *chapterStorage) Get(ctx context.Context, chapterID uint64) (*entity.Chapter, error) {
-	const sql = `SELECT id,name,num,order_num,r_id,updated_at FROM "chapter" WHERE id = $1 ORDER BY order_num`
+	const sql = `SELECT name,num,order_num,r_id,updated_at FROM "chapter" WHERE id = $1 ORDER BY order_num`
 	row := cs.client.QueryRow(ctx, sql, chapterID)
 	chapter := &entity.Chapter{}
-	err := row.Scan(&chapter.ID, &chapter.Name, &chapter.Num, &chapter.OrderNum, &chapter.RegulationID, &chapter.UpdatedAt)
+	err := row.Scan(&chapter.Name, &chapter.Num, &chapter.OrderNum, &chapter.RegulationID, &chapter.UpdatedAt)
 	if err != nil {
-		if err == pgx.ErrNoRows {
-			return &entity.Chapter{ID: 0}, nil
-		}
 		return chapter, err
 	}
 	return chapter, nil

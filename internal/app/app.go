@@ -6,8 +6,10 @@ import (
 	"net"
 	postgressql "read-only_reader_service/internal/adapters/db/postgresql"
 	"read-only_reader_service/internal/config"
+	controller "read-only_reader_service/internal/controller"
+	service "read-only_reader_service/internal/domain/service"
+	"read-only_reader_service/internal/domain/usecase"
 
-	"read-only_reader_service/internal/service"
 	"read-only_reader_service/pkg/client/postgresql"
 	"time"
 
@@ -39,7 +41,14 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 	regAdapter := postgressql.NewRegulationStorage(pgClient)
 	chapterAdapter := postgressql.NewChapterStorage(pgClient)
 	paragraphAdapter := postgressql.NewParagraphStorage(pgClient)
-	regulationGrpcService := service.NewReaderGRPCService(regAdapter, chapterAdapter, paragraphAdapter, logger)
+
+	regulationService := service.NewRegulationService(regAdapter)
+	chapterService := service.NewChapterService(chapterAdapter)
+	paragraphService := service.NewParagraphService(paragraphAdapter)
+
+	regulationUsecase := usecase.NewRegulationUsecase(regulationService)
+	chapterUsecase := usecase.NewChapterUsecase(chapterService, paragraphService)
+	regulationGrpcService := controller.NewReaderGRPCService(regulationUsecase, chapterUsecase)
 
 	// read ca's cert, verify to client's certificate
 	// homeDir, err := os.UserHomeDir()
