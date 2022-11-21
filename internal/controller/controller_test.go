@@ -57,7 +57,9 @@ func TestGetRegulation(t *testing.T) {
 	for _, test := range tests {
 		req := &pb.GetOneRegulationRequest{ID: test.input}
 		e, err := client.GetOneRegulation(ctx, req)
-		t.Log(err)
+		if err != nil {
+			t.Log(err)
+		}
 		assert.True(proto.Equal(test.expected, e), fmt.Sprintf("GetOneRegulation(%v)=%v want: %v", test.input, e, test.expected))
 		assert.Equal(test.err, err)
 	}
@@ -107,9 +109,10 @@ func TestGetChapter(t *testing.T) {
 
 	for _, test := range tests {
 		req := &pb.GetOneChapterRequest{ID: test.input}
-		t.Log(req)
 		e, err := client.GetOneChapter(ctx, req)
-		t.Log(err)
+		if err != nil {
+			t.Log(err)
+		}
 		assert.True(proto.Equal(test.expected, e), fmt.Sprintf("GetChapter(%v)=%v \nwant: %v", test.input, e, test.expected))
 		assert.Equal(test.err, err)
 	}
@@ -149,15 +152,16 @@ func TestGetAllChapters(t *testing.T) {
 		{
 			input:    9999999999999999999,
 			expected: nil,
-			err:      status.Errorf(codes.NotFound, "id was not found: 9999999999999999999"),
+			err:      status.Errorf(codes.Unknown, "9999999999999999999 is greater than maximum value for Int4"),
 		},
 	}
 
 	for _, test := range tests {
 		req := &pb.GetAllChaptersByRegulationIdRequest{ID: test.input}
-		t.Log(req)
 		e, err := client.GetAllChaptersByRegulationId(ctx, req)
-		t.Log(e, err)
+		if err != nil {
+			t.Log(err)
+		}
 		assert.True(proto.Equal(test.expected, e), fmt.Sprintf("GetChapter(%v)=%v \nwant: %v", test.input, e, test.expected))
 		assert.Equal(test.err, err)
 	}
