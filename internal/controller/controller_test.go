@@ -17,7 +17,8 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func TestGetRegulation(t *testing.T) {
+// GetOneRegulation
+func TestGetOneRegulation(t *testing.T) {
 	assert := assert.New(t)
 
 	conn, err := grpc.Dial(
@@ -66,7 +67,8 @@ func TestGetRegulation(t *testing.T) {
 
 }
 
-func TestGetChapter(t *testing.T) {
+// GetOneChapter
+func TestGetOneChapter(t *testing.T) {
 	assert := assert.New(t)
 
 	conn, err := grpc.Dial(
@@ -92,7 +94,7 @@ func TestGetChapter(t *testing.T) {
 	}{
 		{
 			input:    1,
-			expected: &pb.GetOneChapterResponse{ID: 1, Name: "Имя первой записи", Num: "I", RegulationID: 1, OrderNum: 1, Paragraphs: []*pb.ReaderParagraph{&pb.ReaderParagraph{ID: 1, Num: 1, Class: "any-class", Content: "Содержимое первого параграфа", ChapterID: 1}, &pb.ReaderParagraph{ID: 2, Num: 2, HasLinks: true, IsTable: true, IsNFT: true, Class: "any-class", Content: "Содержимое второго параграфа", ChapterID: 1}, &pb.ReaderParagraph{ID: 3, Num: 3, Class: "any-class", Content: "Содержимое третьего параграфа", ChapterID: 1}}, UpdatedAt: timestamppb.New(date)},
+			expected: &pb.GetOneChapterResponse{ID: 1, Name: "Имя первой записи", Num: "I", RegulationID: 1, OrderNum: 1, Paragraphs: []*pb.ReaderParagraph{&pb.ReaderParagraph{ID: 1, Num: 1, Class: "any-class", Content: "Содержимое первого параграфа", ChapterID: 1}, &pb.ReaderParagraph{ID: 2, Num: 2, HasLinks: true, IsTable: true, IsNFT: true, Class: "any-class", Content: "Содержимое второго <a href='372952/4e92c731969781306ebd1095867d2385f83ac7af/335104'>пункта 5.14</a> параграфа", ChapterID: 1}, &pb.ReaderParagraph{ID: 3, Num: 3, Class: "any-class", Content: " <a id='335050'></a>Содержимое третьего параграфа<a href='372952/4e92c731969781306ebd1095867d2385f83ac7af/335065'>таблицей N 2</a>.", ChapterID: 1}}, UpdatedAt: timestamppb.New(date)},
 			err:      nil,
 		},
 		{
@@ -114,12 +116,18 @@ func TestGetChapter(t *testing.T) {
 			t.Log(err)
 		}
 		assert.True(proto.Equal(test.expected, e), fmt.Sprintf("GetChapter(%v)=%v \nwant: %v", test.input, e, test.expected))
+		if e != nil {
+			assert.True(proto.Equal(test.expected.Paragraphs[0], e.Paragraphs[0]))
+			assert.True(proto.Equal(test.expected.Paragraphs[1], e.Paragraphs[1]))
+			assert.True(proto.Equal(test.expected.Paragraphs[2], e.Paragraphs[2]))
+		}
 		assert.Equal(test.err, err)
 	}
 
 }
 
-func TestGetAllChapters(t *testing.T) {
+// GetAllChaptersByRegulationId
+func TestGetAllChaptersByRegulationId(t *testing.T) {
 	assert := assert.New(t)
 
 	conn, err := grpc.Dial(
