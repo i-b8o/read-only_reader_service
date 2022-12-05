@@ -94,7 +94,7 @@ func TestGetOneChapter(t *testing.T) {
 	}{
 		{
 			input:    1,
-			expected: &pb.GetOneChapterResponse{ID: 1, Name: "Имя первой записи", Num: "I", RegulationID: 1, OrderNum: 1, Paragraphs: []*pb.ReaderParagraph{&pb.ReaderParagraph{ID: 1, Num: 1, Class: "any-class", Content: "Содержимое первого параграфа", ChapterID: 1}, &pb.ReaderParagraph{ID: 2, Num: 2, HasLinks: true, IsTable: true, IsNFT: true, Class: "any-class", Content: "Содержимое второго <a href='372952/4e92c731969781306ebd1095867d2385f83ac7af/335104'>пункта 5.14</a> параграфа", ChapterID: 1}, &pb.ReaderParagraph{ID: 3, Num: 3, Class: "any-class", Content: " <a id='335050'></a>Содержимое третьего параграфа<a href='372952/4e92c731969781306ebd1095867d2385f83ac7af/335065'>таблицей N 2</a>.", ChapterID: 1}}, UpdatedAt: timestamppb.New(date)},
+			expected: &pb.GetOneChapterResponse{ID: 1, Name: "Имя первой записи", Num: "I", RegulationID: 1, OrderNum: 1, Paragraphs: []*pb.ReaderParagraph{&pb.ReaderParagraph{ID: 1, Num: 1, HasLinks: true, Class: "any-class", Content: "Содержимое <a id=\"dst101675\"></a> первого <a href='11111/a3a3a3/111'>параграфа</a>", ChapterID: 1}, &pb.ReaderParagraph{ID: 2, Num: 2, HasLinks: true, IsTable: true, IsNFT: true, Class: "any-class", Content: "Содержимое второго <a href='372952/4e92c731969781306ebd1095867d2385f83ac7af/335104'>пункта 5.14</a> параграфа", ChapterID: 1}, &pb.ReaderParagraph{ID: 3, Num: 3, HasLinks: true, Class: "any-class", Content: "<a id='335050'></a>Содержимое третьего параграфа<a href='/document/cons_doc_LAW_2875/'>таблицей N 2</a>.", ChapterID: 1}}, UpdatedAt: timestamppb.New(date)},
 			err:      nil,
 		},
 		{
