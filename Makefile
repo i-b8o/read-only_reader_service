@@ -27,3 +27,5 @@ migrate-down:
 	migrate -path ./migrations -database 'postgres://reader:$p@0.0.0.0:5436/reader?sslmode=disable' down
 update_contracts:
 	go get -u github.com/i-b8o/read-only_contracts@$m
+test:
+	go test -p 1 ./...
