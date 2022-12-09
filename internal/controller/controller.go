@@ -18,10 +18,6 @@ type ChapterUsecase interface {
 	GetAll(ctx context.Context, regulationID uint64) ([]*pb.ReaderChapter, error)
 }
 
-// type ParagraphUsecase interface {
-// 	GetAll(ctx context.Context, chapterID uint64) ([]*pb.ReaderParagraph, error)
-// }
-
 type ReadOnlyRegulationGRPCService struct {
 	regulationUsecase RegulationUsecase
 	chapterUsecase    ChapterUsecase
