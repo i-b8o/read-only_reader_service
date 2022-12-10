@@ -1,4 +1,4 @@
-package controller
+package chapter_controller
 
 import (
 	"context"
@@ -17,8 +17,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// GetOneRegulation
-func TestGetOneRegulation(t *testing.T) {
+func TestGetOne(t *testing.T) {
 	assert := assert.New(t)
 
 	conn, err := grpc.Dial(
@@ -28,57 +27,7 @@ func TestGetOneRegulation(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	client := pb.NewReaderGRPCClient(conn)
-	defer conn.Close()
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	tests := []struct {
-		input    uint64
-		expected *pb.GetOneRegulationResponse
-		err      error
-	}{
-		{
-			input:    1,
-			expected: &pb.GetOneRegulationResponse{Name: "Имя первой записи", Abbreviation: "Аббревиатура первой записи", Title: "Заголовок первой записи"},
-			err:      nil,
-		},
-		{
-			input:    0,
-			expected: nil,
-			err:      status.Errorf(codes.NotFound, "id was not found: 0"),
-		},
-		{
-			input:    9999999999999999999,
-			expected: nil,
-			err:      status.Errorf(codes.NotFound, "id was not found: 9999999999999999999"),
-		},
-	}
-
-	for _, test := range tests {
-		req := &pb.GetOneRegulationRequest{ID: test.input}
-		e, err := client.GetOneRegulation(ctx, req)
-		if err != nil {
-			t.Log(err)
-		}
-		assert.True(proto.Equal(test.expected, e), fmt.Sprintf("GetOneRegulation(%v)=%v want: %v", test.input, e, test.expected))
-		assert.Equal(test.err, err)
-	}
-
-}
-
-// GetOneChapter
-func TestGetOneChapter(t *testing.T) {
-	assert := assert.New(t)
-
-	conn, err := grpc.Dial(
-		fmt.Sprintf("%s:%s", "0.0.0.0", "30000"),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	client := pb.NewReaderGRPCClient(conn)
+	client := pb.NewChapterGRPCClient(conn)
 	defer conn.Close()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -111,7 +60,7 @@ func TestGetOneChapter(t *testing.T) {
 
 	for _, test := range tests {
 		req := &pb.GetOneChapterRequest{ID: test.input}
-		e, err := client.GetOneChapter(ctx, req)
+		e, err := client.GetOne(ctx, req)
 		if err != nil {
 			t.Log(err)
 		}
@@ -126,8 +75,7 @@ func TestGetOneChapter(t *testing.T) {
 
 }
 
-// GetAllChaptersByRegulationId
-func TestGetAllChaptersByRegulationId(t *testing.T) {
+func TestGetAll(t *testing.T) {
 	assert := assert.New(t)
 
 	conn, err := grpc.Dial(
@@ -137,7 +85,7 @@ func TestGetAllChaptersByRegulationId(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	client := pb.NewReaderGRPCClient(conn)
+	client := pb.NewChapterGRPCClient(conn)
 	defer conn.Close()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -166,7 +114,7 @@ func TestGetAllChaptersByRegulationId(t *testing.T) {
 
 	for _, test := range tests {
 		req := &pb.GetAllChaptersByRegulationIdRequest{ID: test.input}
-		e, err := client.GetAllChaptersByRegulationId(ctx, req)
+		e, err := client.GetAll(ctx, req)
 		if err != nil {
 			t.Log(err)
 		}

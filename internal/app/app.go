@@ -6,9 +6,13 @@ import (
 	"net"
 	postgressql "read-only_reader_service/internal/adapters/db/postgresql"
 	"read-only_reader_service/internal/config"
-	controller "read-only_reader_service/internal/controller"
+	chapter_controller "read-only_reader_service/internal/controller/v1/chapter"
+	paragraph_controller "read-only_reader_service/internal/controller/v1/paragraph"
+	regulation_controller "read-only_reader_service/internal/controller/v1/regulation"
 	service "read-only_reader_service/internal/domain/service"
-	"read-only_reader_service/internal/domain/usecase"
+	chapter_usecase "read-only_reader_service/internal/domain/usecase/chapter"
+	paragraph_usecase "read-only_reader_service/internal/domain/usecase/paragraph"
+	regulation_usecase "read-only_reader_service/internal/domain/usecase/regulation"
 
 	"read-only_reader_service/pkg/client/postgresql"
 	"time"
@@ -46,10 +50,13 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 	chapterService := service.NewChapterService(chapterAdapter)
 	paragraphService := service.NewParagraphService(paragraphAdapter)
 
-	regulationUsecase := usecase.NewRegulationUsecase(regulationService)
-	chapterUsecase := usecase.NewChapterUsecase(chapterService, paragraphService)
-	regulationGrpcService := controller.NewReaderGRPCService(regulationUsecase, chapterUsecase)
+	regulationUsecase := regulation_usecase.NewRegulationUsecase(regulationService)
+	chapterUsecase := chapter_usecase.NewChapterUsecase(chapterService, paragraphService)
+	paragraphUsecase := paragraph_usecase.NewParagraphUsecase(paragraphService)
 
+	regulationController := regulation_controller.NewRegulationGRPCService(regulationUsecase)
+	chapterController := chapter_controller.NewChapterGRPCService(chapterUsecase)
+	paragraphController := paragraph_controller.NewParagraphGRPCService(paragraphUsecase)
 	// read ca's cert, verify to client's certificate
 	// homeDir, err := os.UserHomeDir()
 	// if err != nil {
@@ -86,7 +93,9 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 	// pb.RegisterReadOnlyRegulationGRPCServer(grpcServer, regulationGrpcService)
 	logger.Print("grpc server initializing")
 	grpcServer := grpc.NewServer()
-	pb.RegisterReaderGRPCServer(grpcServer, regulationGrpcService)
+	pb.RegisterRegulationGRPCServer(grpcServer, regulationController)
+	pb.RegisterChapterGRPCServer(grpcServer, chapterController)
+	pb.RegisterParagraphGRPCServer(grpcServer, paragraphController)
 
 	return App{cfg: config, grpcServer: grpcServer, logger: logger}, nil
 }
