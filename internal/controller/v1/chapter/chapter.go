@@ -11,7 +11,7 @@ import (
 
 type ChapterUsecase interface {
 	Get(ctx context.Context, chapterID uint64) (*pb.GetOneChapterResponse, error)
-	GetAll(ctx context.Context, regulationID uint64) ([]*pb.ReaderChapter, error)
+	GetAll(ctx context.Context, docID uint64) ([]*pb.ReaderChapter, error)
 }
 
 type ChapterGRPCService struct {
@@ -36,7 +36,7 @@ func (s *ChapterGRPCService) GetOne(ctx context.Context, req *pb.GetOneChapterRe
 	return chapter, nil
 }
 
-func (s *ChapterGRPCService) GetAll(ctx context.Context, req *pb.GetAllChaptersByRegulationIdRequest) (*pb.GetAllChaptersByRegulationIdResponse, error) {
+func (s *ChapterGRPCService) GetAll(ctx context.Context, req *pb.GetAllChaptersByDocIdRequest) (*pb.GetAllChaptersByDocIdResponse, error) {
 	id := req.GetID()
 	chapters, err := s.chapterUsecase.GetAll(ctx, id)
 	if err != nil {
@@ -46,5 +46,5 @@ func (s *ChapterGRPCService) GetAll(ctx context.Context, req *pb.GetAllChaptersB
 		err := status.Errorf(codes.NotFound, fmt.Sprintf("id was not found: %d", id))
 		return nil, err
 	}
-	return &pb.GetAllChaptersByRegulationIdResponse{Chapters: chapters}, nil
+	return &pb.GetAllChaptersByDocIdResponse{Chapters: chapters}, nil
 }

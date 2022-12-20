@@ -10,7 +10,7 @@ import (
 )
 
 type paragraphUsecase interface {
-	GetAll(ctx context.Context, regulationID uint64) ([]*pb.ReaderParagraph, error)
+	GetAll(ctx context.Context, docID uint64) ([]*pb.ReaderParagraph, error)
 }
 
 type ParagraphGRPCService struct {

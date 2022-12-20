@@ -10,7 +10,7 @@ import (
 
 type ChapterService interface {
 	Get(ctx context.Context, chapterID uint64) (*entity.Chapter, error)
-	GetAll(ctx context.Context, regulationID uint64) ([]*pb.ReaderChapter, error)
+	GetAll(ctx context.Context, docID uint64) ([]*pb.ReaderChapter, error)
 }
 
 type ParagraphService interface {
@@ -35,9 +35,9 @@ func (u *chapterUsecase) Get(ctx context.Context, chapterID uint64) (*pb.GetOneC
 	if err != nil {
 		return nil, err
 	}
-	return &pb.GetOneChapterResponse{ID: chapterID, Name: chapterInfo.Name, Num: chapterInfo.Num, RegulationID: chapterInfo.RegulationID, OrderNum: chapterInfo.OrderNum, Paragraphs: paragraphs, UpdatedAt: timestamppb.New(chapterInfo.UpdatedAt)}, nil
+	return &pb.GetOneChapterResponse{ID: chapterID, Name: chapterInfo.Name, Num: chapterInfo.Num, DocID: chapterInfo.DocID, OrderNum: chapterInfo.OrderNum, Paragraphs: paragraphs, UpdatedAt: timestamppb.New(chapterInfo.UpdatedAt)}, nil
 }
 
-func (u *chapterUsecase) GetAll(ctx context.Context, regulationID uint64) ([]*pb.ReaderChapter, error) {
-	return u.chapterService.GetAll(ctx, regulationID)
+func (u *chapterUsecase) GetAll(ctx context.Context, docID uint64) ([]*pb.ReaderChapter, error) {
+	return u.chapterService.GetAll(ctx, docID)
 }

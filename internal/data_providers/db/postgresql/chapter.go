@@ -23,7 +23,7 @@ func (cs *chapterStorage) Get(ctx context.Context, chapterID uint64) (*entity.Ch
 	const sql = `SELECT name,num,order_num,r_id,updated_at FROM "chapter" WHERE id = $1 ORDER BY order_num`
 	row := cs.client.QueryRow(ctx, sql, chapterID)
 	chapter := &entity.Chapter{}
-	err := row.Scan(&chapter.Name, &chapter.Num, &chapter.OrderNum, &chapter.RegulationID, &chapter.UpdatedAt)
+	err := row.Scan(&chapter.Name, &chapter.Num, &chapter.OrderNum, &chapter.DocID, &chapter.UpdatedAt)
 	if err != nil {
 		return chapter, err
 	}
@@ -31,12 +31,12 @@ func (cs *chapterStorage) Get(ctx context.Context, chapterID uint64) (*entity.Ch
 }
 
 // GetAll returns all chapters associated with the given ID
-func (cs *chapterStorage) GetAll(ctx context.Context, regulationID uint64) ([]*pb.ReaderChapter, error) {
-	const sql = `SELECT id,name,num,order_num FROM "chapter" WHERE r_id = $1 ORDER BY order_num`
+func (cs *chapterStorage) GetAll(ctx context.Context, docID uint64) ([]*pb.ReaderChapter, error) {
+	const sql = `SELECT id,name,num,order_num FROM "chapter" WHERE doc_id = $1 ORDER BY order_num`
 
 	var chapters []*pb.ReaderChapter
 
-	rows, err := cs.client.Query(ctx, sql, regulationID)
+	rows, err := cs.client.Query(ctx, sql, docID)
 	if err != nil {
 		return nil, err
 	}

@@ -1,4 +1,4 @@
-package regulation_controller
+package doc_controller
 
 import (
 	"context"
@@ -25,19 +25,19 @@ func TestGetOne(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	client := pb.NewRegulationGRPCClient(conn)
+	client := pb.NewDocGRPCClient(conn)
 	defer conn.Close()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	tests := []struct {
 		input    uint64
-		expected *pb.GetOneRegulationResponse
+		expected *pb.GetOneDocResponse
 		err      error
 	}{
 		{
 			input:    1,
-			expected: &pb.GetOneRegulationResponse{Name: "Имя первой записи", Abbreviation: "Аббревиатура первой записи", Title: "Заголовок первой записи"},
+			expected: &pb.GetOneDocResponse{Name: "Имя первой записи", Abbreviation: "Аббревиатура первой записи", Title: "Заголовок первой записи"},
 			err:      nil,
 		},
 		{
@@ -53,12 +53,12 @@ func TestGetOne(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		req := &pb.GetOneRegulationRequest{ID: test.input}
+		req := &pb.GetOneDocRequest{ID: test.input}
 		e, err := client.GetOne(ctx, req)
 		if err != nil {
 			t.Log(err)
 		}
-		assert.True(proto.Equal(test.expected, e), fmt.Sprintf("GetOneRegulation(%v)=%v want: %v", test.input, e, test.expected))
+		assert.True(proto.Equal(test.expected, e), fmt.Sprintf("GetOneDoc(%v)=%v want: %v", test.input, e, test.expected))
 		assert.Equal(test.err, err)
 	}
 
