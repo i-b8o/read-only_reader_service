@@ -9,24 +9,24 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type paragraphUsecase interface {
+type paragraphService interface {
 	GetAll(ctx context.Context, docID uint64) ([]*pb.ReaderParagraph, error)
 }
 
 type ParagraphGRPCService struct {
-	paragraphUsecase paragraphUsecase
+	paragraphService paragraphService
 	pb.UnimplementedParagraphGRPCServer
 }
 
-func NewParagraphGRPCService(chapterUsecase paragraphUsecase) *ParagraphGRPCService {
+func NewParagraphGRPCService(paragraphService paragraphService) *ParagraphGRPCService {
 	return &ParagraphGRPCService{
-		paragraphUsecase: chapterUsecase,
+		paragraphService: paragraphService,
 	}
 }
 
 func (s *ParagraphGRPCService) GetAll(ctx context.Context, req *pb.GetAllParagraphsByChapterIdRequest) (*pb.GetAllParagraphsByChapterIdResponse, error) {
 	id := req.GetID()
-	paragraphs, err := s.paragraphUsecase.GetAll(ctx, id)
+	paragraphs, err := s.paragraphService.GetAll(ctx, id)
 	if err != nil {
 		return nil, err
 	}

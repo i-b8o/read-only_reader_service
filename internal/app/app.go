@@ -11,8 +11,6 @@ import (
 	postgressql "read-only_reader_service/internal/data_providers/db/postgresql"
 	service "read-only_reader_service/internal/domain/service"
 	chapter_usecase "read-only_reader_service/internal/domain/usecase/chapter"
-	doc_usecase "read-only_reader_service/internal/domain/usecase/doc"
-	paragraph_usecase "read-only_reader_service/internal/domain/usecase/paragraph"
 
 	"read-only_reader_service/pkg/client/postgresql"
 	"time"
@@ -50,13 +48,11 @@ func NewApp(ctx context.Context, config *config.Config) (App, error) {
 	chapterService := service.NewChapterService(chapterAdapter)
 	paragraphService := service.NewParagraphService(paragraphAdapter)
 
-	docUsecase := doc_usecase.NewDocUsecase(docService)
 	chapterUsecase := chapter_usecase.NewChapterUsecase(chapterService, paragraphService)
-	paragraphUsecase := paragraph_usecase.NewParagraphUsecase(paragraphService)
 
-	docController := doc_controller.NewDocGRPCService(docUsecase)
+	docController := doc_controller.NewDocGRPCService(docService)
 	chapterController := chapter_controller.NewChapterGRPCService(chapterUsecase)
-	paragraphController := paragraph_controller.NewParagraphGRPCService(paragraphUsecase)
+	paragraphController := paragraph_controller.NewParagraphGRPCService(paragraphService)
 	// read ca's cert, verify to client's certificate
 	// homeDir, err := os.UserHomeDir()
 	// if err != nil {

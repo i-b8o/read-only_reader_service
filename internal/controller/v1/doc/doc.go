@@ -9,24 +9,24 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type DocUsecase interface {
+type DocService interface {
 	Get(ctx context.Context, docID uint64) (*pb.GetOneDocResponse, error)
 }
 
 type DocGRPCService struct {
-	docUsecase DocUsecase
+	docService DocService
 	pb.UnimplementedDocGRPCServer
 }
 
-func NewDocGRPCService(docUsecase DocUsecase) *DocGRPCService {
+func NewDocGRPCService(docService DocService) *DocGRPCService {
 	return &DocGRPCService{
-		docUsecase: docUsecase,
+		docService: docService,
 	}
 }
 
 func (s *DocGRPCService) GetOne(ctx context.Context, req *pb.GetOneDocRequest) (*pb.GetOneDocResponse, error) {
 	id := req.GetID()
-	resp, err := s.docUsecase.Get(ctx, id)
+	resp, err := s.docService.Get(ctx, id)
 	if err != nil {
 		err := status.Errorf(codes.NotFound, fmt.Sprintf("id was not found: %d", id))
 		return nil, err
