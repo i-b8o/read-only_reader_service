@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"testing"
-	"time"
 
 	pb "github.com/i-b8o/read-only_contracts/pb/reader/v1"
 	"github.com/stretchr/testify/assert"
@@ -14,7 +13,6 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func TestGetOne(t *testing.T) {
@@ -32,9 +30,6 @@ func TestGetOne(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	dateString := "2023-01-01"
-	date, _ := time.Parse("2006-01-02", dateString)
-
 	tests := []struct {
 		input    uint64
 		expected *pb.GetOneChapterResponse
@@ -43,7 +38,7 @@ func TestGetOne(t *testing.T) {
 	}{
 		{
 			input:    1,
-			expected: &pb.GetOneChapterResponse{ID: 1, Name: "Имя первой записи", Num: "I", DocID: 1, OrderNum: 1, Paragraphs: []*pb.ReaderParagraph{&pb.ReaderParagraph{ID: 1, Num: 1, HasLinks: true, Class: "any-class", Content: "Содержимое <a id=\"dst101675\"></a> первого <a href='11111/a3a3a3/111'>параграфа</a>", ChapterID: 1}, &pb.ReaderParagraph{ID: 2, Num: 2, HasLinks: true, IsTable: true, IsNFT: true, Class: "any-class", Content: "Содержимое второго <a href='372952/4e92c731969781306ebd1095867d2385f83ac7af/335104'>пункта 5.14</a> параграфа", ChapterID: 1}, &pb.ReaderParagraph{ID: 3, Num: 3, HasLinks: true, Class: "any-class", Content: "<a id='335050'></a>Содержимое третьего параграфа<a href='/document/cons_doc_LAW_2875/'>таблицей N 2</a>.", ChapterID: 1}}, UpdatedAt: timestamppb.New(date)},
+			expected: &pb.GetOneChapterResponse{ID: 1, Name: "Имя первой записи", Num: "I", DocID: 1, OrderNum: 1, Paragraphs: []*pb.ReaderParagraph{&pb.ReaderParagraph{ID: 1, Num: 1, HasLinks: true, Class: "any-class", Content: "Содержимое <a id=\"dst101675\"></a> первого <a href='11111/a3a3a3/111'>параграфа</a>", ChapterID: 1}, &pb.ReaderParagraph{ID: 2, Num: 2, HasLinks: true, IsTable: true, IsNFT: true, Class: "any-class", Content: "Содержимое второго <a href='372952/4e92c731969781306ebd1095867d2385f83ac7af/335104'>пункта 5.14</a> параграфа", ChapterID: 1}, &pb.ReaderParagraph{ID: 3, Num: 3, HasLinks: true, Class: "any-class", Content: "<a id='335050'></a>Содержимое третьего параграфа<a href='/document/cons_doc_LAW_2875/'>таблицей N 2</a>.", ChapterID: 1}}},
 			err:      nil,
 		},
 		{

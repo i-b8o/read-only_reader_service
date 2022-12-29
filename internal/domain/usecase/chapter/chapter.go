@@ -2,14 +2,12 @@ package usecase_chapter
 
 import (
 	"context"
-	"read-only_reader_service/internal/domain/entity"
 
 	pb "github.com/i-b8o/read-only_contracts/pb/reader/v1"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type ChapterService interface {
-	Get(ctx context.Context, chapterID uint64) (*entity.Chapter, error)
+	Get(ctx context.Context, chapterID uint64) (*pb.ReaderChapter, error)
 	GetAll(ctx context.Context, docID uint64) ([]*pb.ReaderChapter, error)
 }
 
@@ -35,7 +33,7 @@ func (u *chapterUsecase) Get(ctx context.Context, chapterID uint64) (*pb.GetOneC
 	if err != nil {
 		return nil, err
 	}
-	return &pb.GetOneChapterResponse{ID: chapterID, Name: chapterInfo.Name, Num: chapterInfo.Num, DocID: chapterInfo.DocID, OrderNum: chapterInfo.OrderNum, Paragraphs: paragraphs, UpdatedAt: timestamppb.New(chapterInfo.UpdatedAt)}, nil
+	return &pb.GetOneChapterResponse{ID: chapterID, Name: chapterInfo.Name, Num: chapterInfo.Num, DocID: chapterInfo.DocID, OrderNum: chapterInfo.OrderNum, Paragraphs: paragraphs}, nil
 }
 
 func (u *chapterUsecase) GetAll(ctx context.Context, docID uint64) ([]*pb.ReaderChapter, error) {
