@@ -37,7 +37,7 @@ func TestGetOne(t *testing.T) {
 	}{
 		{
 			input:    1,
-			expected: &pb.GetOneDocResponse{Name: "Имя первой записи", Abbreviation: "Аббревиатура первой записи", Title: "Заголовок первой записи"},
+			expected: &pb.GetOneDocResponse{Name: "Имя первой записи"},
 			err:      nil,
 		},
 		{
