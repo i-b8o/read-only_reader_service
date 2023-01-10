@@ -28,7 +28,6 @@ func NewTypeGRPCService(typeAdapter TypeAdapter, logger logging.Logger) *TypeGRP
 }
 
 func (s *TypeGRPCService) GetAll(ctx context.Context, req *pb.Empty) (*pb.GetAllTypesResponse, error) {
-	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 	resp, err := s.typeAdapter.GetAll(ctx)
 	if err != nil {
 		s.logger.Errorf("could not get types %v", err)

@@ -28,6 +28,7 @@ func NewDocGRPCService(docAdapter DocAdapter, logger logging.Logger) *DocGRPCSer
 }
 
 func (s *DocGRPCService) GetOne(ctx context.Context, req *pb.GetOneDocRequest) (*pb.GetOneDocResponse, error) {
+	fmt.Println("Doc finaly")
 	id := req.GetID()
 	resp, err := s.docAdapter.Get(ctx, id)
 	if err != nil {
